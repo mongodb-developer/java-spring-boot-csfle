@@ -1,6 +1,6 @@
-# Quick Start Java Spring Boot & MongoDB Atlas Project which can be deployed on Azure App Service
-This is a demo springboot application created using IntelliJ Spring Initialzr And Azure Plugin 
-to show how to connect to Atlas using a Java Spring Boot Application and deploy it as a Microsoft Azure Wep App(AppService)
+# Quick Start Java Spring Boot & MongoDB Atlas Project with Automatic CSFLE(Client Side Field Level Encryption)
+This is a demo springboot application created using IntelliJ Spring Initialzr which will show case basic CRUD and Automatic CSFLE(Client Side Field Level Encryption with MongoDB Atlas
+to show how to connect to Atlas using a Java Spring Boot Application with PII data automatically encrypted before sending it to the database, that is, MongoDB Atla
 
 ## Supported versions:
 
