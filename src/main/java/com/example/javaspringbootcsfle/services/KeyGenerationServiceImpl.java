@@ -14,7 +14,6 @@ import org.bson.BsonBinary;
 import org.bson.BsonBoolean;
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -40,7 +39,10 @@ public class KeyGenerationServiceImpl implements KeyGenerationService {
         }
     }
 
-    public Map<String, Map<String, Object>> getKmsProviders(){
+    /**
+     * Using a map to store the local master key. In production scenarios, use a key management service provider
+     */
+    public Map<String, Map<String, Object>> getKmsProviders() {
         String kmsProvider = "local";
 
         byte[] localMasterKeyRead = new byte[96];
@@ -61,6 +63,16 @@ public class KeyGenerationServiceImpl implements KeyGenerationService {
 
     }
 
+    /**
+     * Generate a local Data Encryption Key Id
+     * Create unique index on the key vault collection that stores the encrypted 'Data encryption key'
+     * Keys can be per field, document, user, collection, database, or hybrid. The choice is yours.
+     *
+     * @param keyVaultNamespace
+     * @param kmsProviders
+     * @param connectionString
+     * @return
+     */
     public String generateLocalKeyId(String keyVaultNamespace, Map<String, Map<String, Object>> kmsProviders,
                                      String connectionString) {
 
@@ -84,6 +96,11 @@ public class KeyGenerationServiceImpl implements KeyGenerationService {
 
     }
 
+    /**
+     * Helper method to create the unique index on key vault collection to ensure DEK is unique
+     *
+     * @param connectionString
+     */
     private void createIndexOnKeyVaultCollection(String connectionString) {
 
         MongoClient keyVaultClient = MongoClients.create(connectionString);
@@ -98,9 +115,6 @@ public class KeyGenerationServiceImpl implements KeyGenerationService {
         keyVaultCollection.createIndex(new BsonDocument("keyAltNames", new BsonInt32(1)), indexOpts);
         keyVaultClient.close();
     }
-
-
-
 
 
 }

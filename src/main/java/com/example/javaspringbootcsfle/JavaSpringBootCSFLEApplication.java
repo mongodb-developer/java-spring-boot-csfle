@@ -24,7 +24,6 @@ import static com.example.javaspringbootcsfle.constants.DBStrings.*;
 import static com.mongodb.client.model.Filters.eq;
 
 
-
 @SpringBootApplication
 public class JavaSpringBootCSFLEApplication {
 
@@ -47,6 +46,7 @@ public class JavaSpringBootCSFLEApplication {
     public JavaSpringBootCSFLEApplication(KeyGenerationService keyGenerationService) {
         this.keyGenerationService = keyGenerationService;
     }
+
     public static void main(String[] args) {
         SpringApplication.run(JavaSpringBootCSFLEApplication.class, args);
     }
@@ -54,19 +54,19 @@ public class JavaSpringBootCSFLEApplication {
     @Bean
     public MongoClient mongoClient() {
 
-//        String dekId = "<paste-base-64-encoded-data-encryption-key-id>>";
-
         final Map<String, Map<String, Object>> kmsProviders = keyGenerationService.getKmsProviders();
 
+        // We can use the key generation service or use a hardcoded DEK for our example
         final String localDEK = keyGenerationService.generateLocalKeyId(KEY_VAULT_NAMESPACE, kmsProviders, connectionString);
 
-        //String localDEK = "<<Paste ur dek id here>>";
+        //String localDEK = "<<paste-base-64-encoded-data-encryption-key-id>>";
 
         final Map<String, BsonDocument> schemaMap = generateSchemaMap(localDEK);
 
 
+        //crypt_shared path
         Map<String, Object> extraOptions = new HashMap<String, Object>();
-        extraOptions.put("cryptSharedLibPath", CRYPT_SHARED_LIB_PATH );
+        extraOptions.put("cryptSharedLibPath", CRYPT_SHARED_LIB_PATH);
 
 
         MongoClientSettings clientSettings = MongoClientSettings.builder()
@@ -78,12 +78,19 @@ public class JavaSpringBootCSFLEApplication {
                         .extraOptions(extraOptions)
                         .build())
                 .build();
-        Document docSecure = MongoClients.create(clientSettings).getDatabase("personsDB").getCollection("personsEncrypted").find(eq("firstName", "Megha")).first();
-        System.out.println(docSecure.toJson());
+
+        // The below code could be used to test
+//        Document docSecure = MongoClients.create(clientSettings).getDatabase("personsDB").getCollection("personsEncrypted").find(eq("firstName", "Megha")).first();
+//        System.out.println(docSecure.toJson());
 
         return MongoClients.create(clientSettings);
     }
 
+    /**
+     * Generate the schema map needed for automatic encryption
+     * @param DEK_ID
+     * @return
+     */
     private Map<String, BsonDocument> generateSchemaMap(final String DEK_ID) {
 
         Document jsonSchema = new Document().append("bsonType", "object").append("encryptMetadata",
@@ -91,9 +98,9 @@ public class JavaSpringBootCSFLEApplication {
                                 .append("base64", DEK_ID)
                                 .append("subType", "04")))))))
                 .append("properties", new Document()
-                                .append("aadharNumber", new Document().append("encrypt", new Document()
-                                        .append("bsonType", "string")
-                                        .append("algorithm", "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic"))));
+                        .append("aadharNumber", new Document().append("encrypt", new Document()
+                                .append("bsonType", "string")
+                                .append("algorithm", "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic"))));
 
         Map<String, BsonDocument> schemaMap = new HashMap<String, BsonDocument>();
         schemaMap.put(DATABASE + "." + COLLECTION, BsonDocument.parse(jsonSchema.toJson()));
