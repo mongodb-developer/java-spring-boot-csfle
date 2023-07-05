@@ -1,7 +1,7 @@
-package com.example.javaspringbootcsfle.controller;
+package com.mongodb.quickstart.javaspringbootcsfle.controller;
 
-import com.example.javaspringbootcsfle.model.Person;
-import com.example.javaspringbootcsfle.repository.PersonRepository;
+import com.mongodb.quickstart.javaspringbootcsfle.model.Person;
+import com.mongodb.quickstart.javaspringbootcsfle.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +31,6 @@ public class PersonController {
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
     public Person createPerson(@RequestBody Person person) {
-
         return this.personRepository.save(person);
     }
 }

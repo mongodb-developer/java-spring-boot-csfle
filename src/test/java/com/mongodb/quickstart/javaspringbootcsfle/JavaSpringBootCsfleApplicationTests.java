@@ -1,4 +1,4 @@
-package com.example.javaspringbootcsfle;
+package com.mongodb.quickstart.javaspringbootcsfle;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
