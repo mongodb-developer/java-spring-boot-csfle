@@ -79,7 +79,7 @@ public class JavaSpringBootCSFLEApplication {
                                 .append("base64", DEK_ID)
                                 .append("subType", "04")))))))
                 .append("properties", new Document()
-                        .append("aadharNumber", new Document().append("encrypt", new Document()
+                        .append("passportNumber", new Document().append("encrypt", new Document()
                                 .append("bsonType", "string")
                                 .append("algorithm", "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic"))));
 

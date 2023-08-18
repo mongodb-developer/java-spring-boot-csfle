@@ -20,7 +20,7 @@ public class Person {
 
     @Indexed(unique = true)
     @Field
-    private String aadharNumber;
+    private String passportNumber;
 
     public Person() {
     }
@@ -28,7 +28,7 @@ public class Person {
     public Person(String firstName, String lastName, String aadharNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.aadharNumber = aadharNumber;
+        this.passportNumber = aadharNumber;
     }
 
     public String getFirstName() {
@@ -55,11 +55,11 @@ public class Person {
         this.id = id;
     }
 
-    public String getAadharNumber() {
-        return aadharNumber;
+    public String getPassportNumber() {
+        return passportNumber;
     }
 
-    public void setAadharNumber(String aadharNumber) {
-        this.aadharNumber = aadharNumber;
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
     }
 }
